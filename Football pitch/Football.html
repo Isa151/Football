@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Football Field</title>
+    <style>
+        body {
+            background-color: #4CAF50; /* Green background color */
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .field {
+            width: 700px;
+            height: 400px;
+            background-color: #4CAF50; /* Green */
+            position: relative;
+            border: 2px solid white;
+            border-radius: 10px;
+            z-index: 0;
+        }
+
+        .center-circle {
+            width: 120px;
+            height: 120px;
+            background-color: transparent;
+            border: 2px solid white;
+            border-radius: 50%;
+            position: absolute;
+            top: calc(50% - 60px);
+            left: calc(50% - 60px);
+        }
+
+        .penalty-area {
+            width: 200px;
+            height: 100px;
+            background-color: transparent;
+            border: 2px solid white;
+            position: absolute;
+        }
+
+        .penalty-area.left {
+            left: 0;
+            top: calc(50% - 50px);
+        }
+
+        .penalty-area.right {
+            right: 0;
+            top: calc(50% - 50px);
+        }
+
+        .goal {
+            width: 20px;
+            height: 140px;
+            background-color: white;
+            position: absolute;
+        }
+
+        .goal.left {
+            left: 0;
+            top: calc(50% - 70px);
+        }
+
+        .goal.right {
+            right: 0;
+            top: calc(50% - 70px);
+        }
+
+        .halfway-line {
+            width: 2px;
+            height: 100%;
+            background-color: white;
+            position: absolute;
+            left: calc(50% - 1px);
+            z-index: 1;
+        }
+
+        .circle {
+            width: 50px;
+            height: 50px;
+            background-color: white;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .circle.left {
+            left: 0;
+            top: calc(50% - 25px);
+        }
+
+        .circle.right {
+            right: 0;
+            top: calc(50% - 25px);
+        }
+        .ball img{
+            width: 30px;
+            height: 30px;
+            margin: 44px auto;
+            margin-inline: 42px;
+            z-index: 2;
+            position: absolute;
+        }
+        .ball{
+            width: fit-content;
+            height: fit-content;
+
+        }
+    </style>
+</head>
+<body>
+
+<div class="field">
+    <div class="center-circle">
+        <div  draggable="true"  class="ball">
+            <img src="img/ball-removebg-preview.png">
+        </div>
+    </div>
+    <div class="penalty-area left"></div>
+    <div class="penalty-area right"></div>
+    <div class="goal left"></div>
+    <div class="goal right"></div>
+    <div class="halfway-line"></div>
+    <div class="circle left"></div>
+    <div class="circle right"></div>
+</div>
+
+<script>
+    let ball = document.querySelector(".ball")
+    let field = document.querySelector(".field")
+
+
+    // Drag and drop functionality
+    ball.ondragstart = (e) => {
+        setTimeout(() => {
+            ball.style.display = "none"
+        }, 0);
+    }
+    ball.ondragend = (e) => {
+        ball.style.display = "block"
+    }
+
+    document.body.ondrop = (e) => {
+        const { offsetX, offsetY } = e;
+        ball.style.left = offsetX - 15 + "px"; // Center ball on cursor position
+        ball.style.top = offsetY - 15 + "px";
+        checkGoal(offsetX, offsetY);
+    }
+
+    document.body.ondragenter = (e) => {
+        e.preventDefault()
+    }
+
+    document.body.ondragover = (e) => {
+        e.preventDefault()
+    }
+
+    // Function to check if the ball is in the goal area
+    function checkGoal(x, y) {
+        const goalLeft = 0;
+        const goalRight = field.offsetWidth;
+
+        if ((y > (field.offsetHeight / 2 - 70) && y < (field.offsetHeight / 2 + 70)) &&
+            (x <= goalLeft || x >= goalRight)) {
+            alert("Гол!");
+        }
+    }
+</script>
+
+</body>
+</html>
